@@ -1,4 +1,5 @@
 @import "./variables";
+@import "./mixins";
 
 .container { 
     background-color: rgba(0, 0, 0, 0.8);
@@ -25,6 +26,15 @@
     &:focus {
         outline: none;
     }
+    @include mediaQuery(S) {
+        width: 300px;
+    }
+    @include mediaQuery(M) {
+        width: 450px;
+    }
+    @include mediaQuery(L) {
+        width: 700px;
+    }
 }
 
 .header {
@@ -50,12 +60,13 @@
     flex-direction: column;
     input {
         text-align: center;
-        font-size: 16px;
+        font-size: 18px;
         font-family: $font-base;
         background-color: rgba(255, 255, 255, 0.1);
         box-shadow: 0 0 5px $primary-color;
         border-radius: 4px 4px 0 0;
-        padding: 5px;
+        padding: 10px 5px;
+        letter-spacing: 1px;
         border: none;
         transition: all 0.2s;
         &:focus {
@@ -79,5 +90,8 @@
             color: #000;
             background-color: $primary-color;
         }
+    }
+    p {
+        font-size: 18px;
     }
 }

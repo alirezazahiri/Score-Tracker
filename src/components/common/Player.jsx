@@ -41,7 +41,10 @@ const reducer = (state, action) => {
 
 const Player = ({ player }) => {
   const { setPlayers, players } = useContext(PlayersContext);
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    score: player.score,
+  });
   const [open, setOpen] = useState(false);
 
   const inputRef = useRef();
@@ -52,10 +55,12 @@ const Player = ({ player }) => {
     const index = currentPlayers.findIndex((p) => p.id === player.id);
     currentPlayers[index].score = score + newScore;
     setPlayers(currentPlayers);
+    localStorage.setItem("players", JSON.stringify(currentPlayers));
   };
 
   const changeHandler = (e) => {
-    dispatch({ type: "CHANGE_VALUE", payload: e.target.value });
+    const { value } = e.target;
+    if (/^\d+$/.test(value)) dispatch({ type: "CHANGE_VALUE", payload: value });
   };
 
   const submitHandler = (e) => {
@@ -111,7 +116,6 @@ const Player = ({ player }) => {
             <DeleteIcon />
           </IconButton>
         </TableCell>
-        
       </TableRow>
       <TableRow className="option-container">
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -125,8 +129,6 @@ const Player = ({ player }) => {
                       scope="row"
                       style={{
                         border: "none",
-                        display: "flex",
-                        justifyContent: "space-between",
                       }}
                     >
                       <form onSubmit={submitHandler} className="score-form">

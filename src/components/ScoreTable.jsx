@@ -41,9 +41,12 @@ const ScoreTable = ({ players, setPlayers, setOpen }) => {
         <TableHead>
           <TableRow>
             <TableCell></TableCell>
-            {players.length > 0 && (
+            {players && players.length > 0 && (
               <>
-                <TableCell onClick={() => sortPlayers("name", nameOrder)}>
+                <TableCell
+                  style={{ cursor: "pointer" }}
+                  onClick={() => sortPlayers("name", nameOrder)}
+                >
                   Player
                   {nameOrder === "asc" ? (
                     <ArrowDropUpIcon />
@@ -70,7 +73,7 @@ const ScoreTable = ({ players, setPlayers, setOpen }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {players.length > 0 ? (
+          {players && players.length > 0 ? (
             players.map((player) => <Player key={player.id} player={player} />)
           ) : (
             <TableRow>

@@ -1,0 +1,15 @@
+@mixin mediaQuery($width) {
+    @if ($width == S) {
+        @media (min-width: 0) and  (max-width: 480px){
+            @content
+        }
+    } @else if ($width == M) {
+        @media (min-width: 481px) and  (max-width: 768px){
+            @content
+        }
+    } @else if ($width == L) {
+        @media (min-width: 769px) {
+            @content
+        }
+    }
+}
