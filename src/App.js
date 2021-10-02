@@ -1,17 +1,22 @@
-import React from 'react';
+import React from "react";
 
 // Components
-import ScoreTracker from './components/ScoreTracker';
+import ScoreTracker from "./components/ScoreTracker";
+
+// Contexts
+import PlayersContextProvider from "./contexts/PlayersContextProvider";
 
 // styles
-import "./App.css"
+import "./App.scss";
 
 const App = () => {
   return (
-    <div className="App">
-      <ScoreTracker />
-    </div>
+    <PlayersContextProvider>
+      <div className="App">
+        <ScoreTracker />
+      </div>
+    </PlayersContextProvider>
   );
-}
+};
 
 export default App;

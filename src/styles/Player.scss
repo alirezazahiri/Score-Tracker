@@ -1,0 +1,69 @@
+@import "./variables";
+
+.container {
+    td {
+        background-color: #000;
+        border-bottom: 1px solid $primary-color;
+    }
+}
+
+.dropdown {
+    svg {
+        color: $light-green;
+    }
+}
+.delete {
+    svg {
+        color: #f00;
+    }
+}
+
+.reset {
+    svg {
+        color: $light-yellow;
+    }
+}
+
+.option-container {
+    background-color: #000;
+}
+
+.score-form {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    input {
+        text-align: center;
+        width: 100%;
+        font-size: 16px;
+        font-family: $font-base;
+        background-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 5px $primary-color;
+        border-radius: 4px 4px 0 0;
+        padding: 5px;
+        border: none;
+        transition: all 0.2s;
+        &:focus {
+            outline: none;
+            border-bottom: $primary-color;
+        }
+        color: $primary-color;
+    }
+    button {
+        box-shadow: 0 1px 5px $primary-color;
+        font-family: $font-base;
+        width: 100%;
+        font-size: 16px;
+        border-radius: 0 0 4px 4px;
+        border: none;
+        padding: 5px;
+        background-color: #000;
+        color: $primary-color;
+        transition: all 0.2s;
+        &:hover {
+            cursor: pointer;
+            color: #000;
+            background-color: $primary-color;
+        }
+    }
+}

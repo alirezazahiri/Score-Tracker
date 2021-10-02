@@ -1,0 +1,25 @@
+@import "./variables";
+
+.container  {
+    min-width: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    thead {
+        tr {
+            th {
+                border-bottom: $primary-color;
+            }
+        }
+        th {
+            color: $primary-color;
+            font-family: $font-base;
+            font-size: 18px;
+        }
+    }
+    tbody {
+        th, td {
+            color: $primary-color;
+            font-family: $font-base;
+            font-size: 16px;
+        }
+    }
+}

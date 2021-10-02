@@ -1,0 +1,83 @@
+@import "./variables";
+
+.container { 
+    background-color: rgba(0, 0, 0, 0.8);
+    font-family: $font-base;
+    h2 {
+        font-size: 24px;
+    }
+}
+
+.box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(20px);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    outline: none;
+    border: 1px solid $primary-color;
+    box-shadow: 0 0 20px $primary-color;
+    &:focus {
+        outline: none;
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    svg {
+        color: red;
+        &:hover {
+            cursor: pointer;
+        }
+    }    
+}
+
+.body {
+    padding: 30px;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    input {
+        text-align: center;
+        font-size: 16px;
+        font-family: $font-base;
+        background-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 5px $primary-color;
+        border-radius: 4px 4px 0 0;
+        padding: 5px;
+        border: none;
+        transition: all 0.2s;
+        &:focus {
+            outline: none;
+            border-bottom: $primary-color;
+        }
+        color: $primary-color;
+    }
+    button {
+        box-shadow: 0 1px 5px $primary-color;
+        font-family: $font-base;
+        font-size: 16px;
+        border-radius: 0 0 4px 4px;
+        border: none;
+        padding: 5px;
+        background-color: #000;
+        color: $primary-color;
+        transition: all 0.2s;
+        &:hover {
+            cursor: pointer;
+            color: #000;
+            background-color: $primary-color;
+        }
+    }
+}

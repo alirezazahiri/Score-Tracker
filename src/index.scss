@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Gemunu+Libre:wght@200;300;400;500;600&family=Lato:ital,wght@0,100;0,300;0,400;1,100;1,300;1,400&display=swap');
+@import "./styles/variables";
 
 html {
   scroll-behavior: smooth;
@@ -9,10 +9,10 @@ html {
 }
 
 body {
-  background-color: #000000;
-  color: #F0A500;
+  background-color: $background-color;
+  color: $primary-color;
 
-  font-family: 'Gemunu Libre', sans-serif;
+  font-family: $font-base;
   margin: 0;
   padding: 0;
 }

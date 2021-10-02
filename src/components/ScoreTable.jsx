@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 // Common
 import Player from "./common/Player";
@@ -16,55 +16,76 @@ import Paper from "@mui/material/Paper";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
-const ScoreTable = ({ players }) => {
-  const [currentPlayers, setCurrentPlayers] = useState([]);
-  const [order, setOrder] = useState("asc");
+// Styles
+import "../styles/ScoreTable.scss";
 
-  useEffect(() => {
-    setCurrentPlayers(players);
-  }, [players]);
+const ScoreTable = ({ players, setPlayers, setOpen }) => {
+  const [scoreOrder, setScoreOrder] = useState("asc");
+  const [nameOrder, setNameOrder] = useState("asc");
 
-  const sortPlayers = (sortBy) => {
-    let players = currentPlayers;
-    players = players.sort((a, b) => (a.score > b.score ? -1 : 1));
-    const scores = players.map((player) => {
-      return player.score;
-    });
-    console.log(scores);
-    if (sortBy === "asc") setCurrentPlayers(players);
-    else setCurrentPlayers(players.reverse());
-    setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  const sortPlayers = (sortBy, order) => {
+    let currentPlayers = players;
+    if (sortBy === "name") {
+      currentPlayers = players.sort((a, b) => (a.name > b.name ? -1 : 1));
+      setNameOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    } else {
+      currentPlayers = players.sort((a, b) => (a.score > b.score ? -1 : 1));
+      setScoreOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    }
+    setPlayers(order === "asc" ? currentPlayers : currentPlayers.reverse());
   };
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: "100%" }} aria-label="collapsible table">
+      <Table className="container" aria-label="collapsible table">
         <TableHead>
           <TableRow>
             <TableCell></TableCell>
-            <TableCell>Player</TableCell>
-            <TableCell
-              align="center"
-              onClick={() => sortPlayers(order)}
-              style={{ cursor: "pointer" }}
-            >
-              Score{" "}
-              {order === "asc" ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-            </TableCell>
-            {/* <TableCell align="center"></TableCell>
-            <TableCell align="center"></TableCell>
-            <TableCell align="center"></TableCell> */}
+            {players.length > 0 && (
+              <>
+                <TableCell onClick={() => sortPlayers("name", nameOrder)}>
+                  Player
+                  {nameOrder === "asc" ? (
+                    <ArrowDropUpIcon />
+                  ) : (
+                    <ArrowDropDownIcon />
+                  )}
+                </TableCell>
+                <TableCell
+                  align="center"
+                  onClick={() => sortPlayers("score", scoreOrder)}
+                  style={{ cursor: "pointer" }}
+                >
+                  Score
+                  {scoreOrder === "asc" ? (
+                    <ArrowDropUpIcon />
+                  ) : (
+                    <ArrowDropDownIcon />
+                  )}
+                </TableCell>
+                <TableCell align="center"></TableCell>
+                <TableCell align="center"></TableCell>
+              </>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
-          {currentPlayers.map((player) => (
-            <Player
-              key={player.id}
-              player={player}
-              setCurrentPlayers={setCurrentPlayers}
-              currentPlayers={currentPlayers}
-            />
-          ))}
+          {players.length > 0 ? (
+            players.map((player) => <Player key={player.id} player={player} />)
+          ) : (
+            <TableRow>
+              <TableCell style={{ textAlign: "center" }}>
+                There are no players in here,{" "}
+                <span
+                  onClick={() => setOpen(true)}
+                  style={{ cursor: "pointer", textDecoration: "underline" }}
+                >
+                  Add Some
+                </span>{" "}
+                to Get Started!
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

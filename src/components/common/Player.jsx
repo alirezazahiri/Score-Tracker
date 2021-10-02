@@ -1,4 +1,7 @@
-import React, { useReducer, useRef, useState } from "react";
+import React, { useContext, useReducer, useRef, useState } from "react";
+
+// Contexts
+import { PlayersContext } from "../../contexts/PlayersContextProvider";
 
 // MUI
 import Table from "@mui/material/Table";
@@ -12,6 +15,11 @@ import IconButton from "@mui/material/IconButton";
 // Icons
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import DeleteIcon from "@mui/icons-material/Delete";
+import RotateLeftIcon from "@mui/icons-material/RotateLeft";
+
+// Styles
+import "../../styles/Player.scss";
 
 const initialState = {
   score: 0,
@@ -31,17 +39,19 @@ const reducer = (state, action) => {
   }
 };
 
-const Player = ({ player, setCurrentPlayers, currentPlayers }) => {
+const Player = ({ player }) => {
+  const { setPlayers, players } = useContext(PlayersContext);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const inputRef = useRef();
   const { score, value } = state;
 
   const updatePlayers = (newScore) => {
-    let players = currentPlayers;
-    players[Number(player.id) - 1].score = score + newScore;
-    setCurrentPlayers(players);
+    let currentPlayers = players;
+    const index = currentPlayers.findIndex((p) => p.id === player.id);
+    currentPlayers[index].score = score + newScore;
+    setPlayers(currentPlayers);
   };
 
   const changeHandler = (e) => {
@@ -61,11 +71,17 @@ const Player = ({ player, setCurrentPlayers, currentPlayers }) => {
     inputRef.current.value = "";
   };
 
+  const deleteHandler = () => {
+    const currentPlayers = players.filter((p) => p.id !== player.id);
+    setPlayers(currentPlayers);
+  };
+
   return (
     <>
-      <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+      <TableRow className="container">
         <TableCell>
           <IconButton
+            className="dropdown"
             aria-label="expand row"
             size="small"
             onClick={() => setOpen(!open)}
@@ -73,63 +89,65 @@ const Player = ({ player, setCurrentPlayers, currentPlayers }) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
-          {player.name}
-        </TableCell>
+        <TableCell>{player.name}</TableCell>
         <TableCell align="center">{score}</TableCell>
-        {false && (
-          <>
-            <TableCell align="center">
-              <form onSubmit={submitHandler}>
-                <input ref={inputRef} type="text" onChange={changeHandler} />
-                <button type="submit" disabled={!value}>
-                  Add
-                </button>
-              </form>
-            </TableCell>
-            <TableCell align="center">
-              <button onClick={resetHandler}>Reset</button>
-            </TableCell>
-          </>
-        )}
+        <TableCell>
+          <IconButton
+            className="reset"
+            aria-label="expand row"
+            size="small"
+            onClick={resetHandler}
+          >
+            <RotateLeftIcon />
+          </IconButton>
+        </TableCell>
+        <TableCell>
+          <IconButton
+            className="delete"
+            aria-label="expand row"
+            size="small"
+            onClick={deleteHandler}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </TableCell>
+        
       </TableRow>
-      {true && (
-        <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1 }}>
-                <Table size="small" aria-label="score table">
-                  <TableBody>
-                    <TableRow>
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        style={{ border: "none", display: "flex", justifyContent: "space-between"}}
-                      >
-                        <form onSubmit={submitHandler}>
-                          <input
-                            ref={inputRef}
-                            type="text"
-                            onChange={changeHandler}
-                          />
-                          <button type="submit" disabled={!value}>
-                            Add
-                          </button>
-                        </form>
-                        <button onClick={resetHandler}>Reset</button>
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        style={{ border: "none" }}
-                      ></TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </Box>
-            </Collapse>
-          </TableCell>
-        </TableRow>
-      )}
+      <TableRow className="option-container">
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Table size="small" aria-label="score table">
+                <TableBody>
+                  <TableRow>
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      style={{
+                        border: "none",
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <form onSubmit={submitHandler} className="score-form">
+                        <input
+                          ref={inputRef}
+                          pattern="\d*"
+                          type="text"
+                          onChange={changeHandler}
+                        />
+                        <button type="submit" disabled={!value}>
+                          Add
+                        </button>
+                      </form>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
     </>
   );
 };

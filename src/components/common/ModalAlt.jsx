@@ -1,35 +1,32 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+// Icons
+import CloseIcon from "@mui/icons-material/Close";
+
+// Styles
+import "../../styles/Modal.scss";
+
+// services
+import createID, { createName } from "../../services/randomServices";
 
 const ModalAlt = ({ open, setOpen, players, setPlayers }) => {
   const handleClose = () => setOpen(false);
   const [name, setName] = useState("");
+  const inputRef = useRef();
 
   const submitHandler = (e) => {
     e.preventDefault();
     setPlayers([
       ...players,
       {
-        id: `${players.length + 1}`,
-        name: name ? name : `Unknown ${players.length}`,
+        id: `${createID()}`,
+        name: name ? name : `${createName()}`,
         score: 0,
       },
     ]);
-    setOpen(false);
+    setName("");
   };
 
   const changeHandler = (e) => {
@@ -38,24 +35,29 @@ const ModalAlt = ({ open, setOpen, players, setPlayers }) => {
   };
 
   return (
-    <div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            New Player ?
-          </Typography>
-          <form onSubmit={submitHandler}>
-            <input type="text" onChange={changeHandler} value={name} />
-            <button type="submit">submit</button>
-          </form>
-        </Box>
-      </Modal>
-    </div>
+    <Modal
+      className="container"
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="title"
+      aria-describedby="description"
+    >
+      <Box className="box">
+        <div className="header">
+          <h2>New Player ?</h2>
+          <CloseIcon onClick={handleClose} />
+        </div>
+        <form onSubmit={submitHandler} className="body">
+          <input
+            ref={inputRef}
+            type="text"
+            onChange={changeHandler}
+            value={name}
+          />
+          <button type="submit">Add Player</button>
+        </form>
+      </Box>
+    </Modal>
   );
 };
 
