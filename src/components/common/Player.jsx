@@ -21,6 +21,17 @@ import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 // Styles
 import "../../styles/Player.scss";
 
+// Toast
+import toast, { Toaster } from "react-hot-toast";
+
+const toastStyle = {
+  background: "#000",
+  border: "1px solid #F0A500",
+  boxShadow: "0 0 12px #F0A500",
+  padding: "16px",
+  color: "#F0A500",
+};
+
 const initialState = {
   score: 0,
   value: "",
@@ -53,20 +64,28 @@ const Player = ({ player }) => {
   const updatePlayers = (newScore) => {
     let currentPlayers = players;
     const index = currentPlayers.findIndex((p) => p.id === player.id);
+    const prevScore = currentPlayers[index].score;
     currentPlayers[index].score = score + newScore;
     setPlayers(currentPlayers);
     localStorage.setItem("players", JSON.stringify(currentPlayers));
+    toast.dismiss();
+    toast.success(
+      `${currentPlayers[index].name} Score Updated from ${prevScore} to ${currentPlayers[index].score}`
+    );
   };
 
   const changeHandler = (e) => {
     const { value } = e.target;
-    if (/^\d+$/.test(value)) dispatch({ type: "CHANGE_VALUE", payload: value });
+    if (/^-?\d+(\.\d+)?$/.test(value))
+      dispatch({ type: "CHANGE_VALUE", payload: value });
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch({ type: "ADD_SCORE", payload: Number(value) });
-    updatePlayers(Number(value));
+    if (/^-?\d+(\.\d+)?$/.test(value)) {
+      dispatch({ type: "ADD_SCORE", payload: Number(value) });
+      updatePlayers(Number(value));
+    }
     inputRef.current.value = "";
   };
 
@@ -83,6 +102,13 @@ const Player = ({ player }) => {
 
   return (
     <>
+      <Toaster
+        position="bottom-center"
+        reverseOrder={false}
+        toastOptions={{
+          style: toastStyle,
+        }}
+      />
       <TableRow className="container">
         <TableCell>
           <IconButton
@@ -134,8 +160,7 @@ const Player = ({ player }) => {
                       <form onSubmit={submitHandler} className="score-form">
                         <input
                           ref={inputRef}
-                          pattern="\d*"
-                          type="text"
+                          type="tel"
                           onChange={changeHandler}
                         />
                         <button type="submit" disabled={!value}>

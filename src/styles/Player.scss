@@ -35,12 +35,12 @@
     input {
         text-align: center;
         width: 100%;
-        font-size: 16px;
+        font-size: 18px;
         font-family: $font-base;
         background-color: rgba(255, 255, 255, 0.1);
         box-shadow: 0 0 5px $primary-color;
         border-radius: 4px 4px 0 0;
-        padding: 5px;
+        padding: 10px 5px;
         border: none;
         transition: all 0.2s;
         &:focus {
