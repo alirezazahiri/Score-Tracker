@@ -19,6 +19,17 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 // Styles
 import "../styles/ScoreTable.scss";
 
+// Toast
+import toast, { Toaster } from "react-hot-toast";
+
+const toastStyle = {
+  background: "#000",
+  border: "1px solid #F0A500",
+  boxShadow: "0 0 12px #F0A500",
+  padding: "16px",
+  color: "#F0A500",
+};
+
 const ScoreTable = ({ players, setPlayers, setOpen }) => {
   const [scoreOrder, setScoreOrder] = useState("asc");
   const [nameOrder, setNameOrder] = useState("asc");
@@ -35,8 +46,23 @@ const ScoreTable = ({ players, setPlayers, setOpen }) => {
     setPlayers(order === "asc" ? currentPlayers : currentPlayers.reverse());
   };
 
+  const showToast = (type, message) => {
+    toast.dismiss();
+    if (type === "success")
+      toast.success(message);
+    else if(type === "error") 
+      toast.error(message)
+  }
+
   return (
     <TableContainer component={Paper}>
+      <Toaster
+        position="bottom-center"
+        reverseOrder={false}
+        toastOptions={{
+          style: toastStyle,
+        }}
+      />
       <Table className="container" aria-label="collapsible table">
         <TableHead>
           <TableRow>
@@ -74,7 +100,7 @@ const ScoreTable = ({ players, setPlayers, setOpen }) => {
         </TableHead>
         <TableBody>
           {players && players.length > 0 ? (
-            players.map((player) => <Player key={player.id} player={player} />)
+            players.map((player) => <Player key={player.id} player={player} showToast={showToast}/>)
           ) : (
             <TableRow>
               <TableCell style={{ textAlign: "center" }}>

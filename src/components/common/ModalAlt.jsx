@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
@@ -25,7 +25,6 @@ const toastStyle = {
 const ModalAlt = ({ open, setOpen, players, setPlayers }) => {
   const handleClose = () => setOpen(false);
   const [name, setName] = useState("");
-  const inputRef = useRef();
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -73,7 +72,6 @@ const ModalAlt = ({ open, setOpen, players, setPlayers }) => {
           <form onSubmit={submitHandler} className="body">
             <p>Add as much as players you need to track their scores!</p>
             <input
-              ref={inputRef}
               type="text"
               onChange={changeHandler}
               value={name}

@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useRef, useState } from "react";
+import React, { useContext, useReducer, useState } from "react";
 
 // Contexts
 import { PlayersContext } from "../../contexts/PlayersContextProvider";
@@ -21,17 +21,6 @@ import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 // Styles
 import "../../styles/Player.scss";
 
-// Toast
-import toast, { Toaster } from "react-hot-toast";
-
-const toastStyle = {
-  background: "#000",
-  border: "1px solid #F0A500",
-  boxShadow: "0 0 12px #F0A500",
-  padding: "16px",
-  color: "#F0A500",
-};
-
 const initialState = {
   score: 0,
   value: "",
@@ -50,7 +39,7 @@ const reducer = (state, action) => {
   }
 };
 
-const Player = ({ player }) => {
+const Player = ({ player, showToast }) => {
   const { setPlayers, players } = useContext(PlayersContext);
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
@@ -58,7 +47,6 @@ const Player = ({ player }) => {
   });
   const [open, setOpen] = useState(false);
 
-  const inputRef = useRef();
   const { score, value } = state;
 
   const updatePlayers = (newScore) => {
@@ -68,31 +56,32 @@ const Player = ({ player }) => {
     currentPlayers[index].score = score + newScore;
     setPlayers(currentPlayers);
     localStorage.setItem("players", JSON.stringify(currentPlayers));
-    toast.dismiss();
-    toast.success(
-      `${currentPlayers[index].name} Score Updated from ${prevScore} to ${currentPlayers[index].score}`
-    );
+    const message = `${currentPlayers[index].name} Score Updated from ${prevScore} to ${currentPlayers[index].score}`;
+    showToast("success", message);
   };
 
   const changeHandler = (e) => {
     const { value } = e.target;
-    if (/^-?\d+(\.\d+)?$/.test(value))
+    if (`${Number(value)}` !== "NaN" || value[0] === "-")
       dispatch({ type: "CHANGE_VALUE", payload: value });
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (/^-?\d+(\.\d+)?$/.test(value)) {
+    console.log();
+    if (`${Number(value)}` !== "NaN") {
       dispatch({ type: "ADD_SCORE", payload: Number(value) });
       updatePlayers(Number(value));
+    } else {
+      showToast("error", "Failed to Update Score!");
     }
-    inputRef.current.value = "";
+    dispatch({ type: "CHANGE_VALUE", payload: "" });
   };
 
   const resetHandler = () => {
     dispatch({ type: "RESET" });
     updatePlayers(0);
-    inputRef.current.value = "";
+    dispatch({ type: "CHANGE_VALUE", payload: "" });
   };
 
   const deleteHandler = () => {
@@ -102,13 +91,6 @@ const Player = ({ player }) => {
 
   return (
     <>
-      <Toaster
-        position="bottom-center"
-        reverseOrder={false}
-        toastOptions={{
-          style: toastStyle,
-        }}
-      />
       <TableRow className="container">
         <TableCell>
           <IconButton
@@ -159,9 +141,9 @@ const Player = ({ player }) => {
                     >
                       <form onSubmit={submitHandler} className="score-form">
                         <input
-                          ref={inputRef}
-                          type="tel"
+                          type="text"
                           onChange={changeHandler}
+                          value={value}
                         />
                         <button type="submit" disabled={!value}>
                           Add
