@@ -49,14 +49,14 @@ const Player = ({ player, showToast }) => {
 
   const { score, value } = state;
 
-  const updatePlayers = (newScore) => {
+  const updatePlayers = (newScore, type="") => {
     let currentPlayers = players;
     const index = currentPlayers.findIndex((p) => p.id === player.id);
     const prevScore = currentPlayers[index].score;
     currentPlayers[index].score = score + newScore;
     setPlayers(currentPlayers);
     localStorage.setItem("players", JSON.stringify(currentPlayers));
-    const message = `${currentPlayers[index].name} Score Updated from ${prevScore} to ${currentPlayers[index].score}`;
+    const message = `${currentPlayers[index].name} Score Updated from ${prevScore} to ${type === "reset" ? newScore : currentPlayers[index].score}`;
     showToast("success", message);
   };
 
@@ -68,7 +68,6 @@ const Player = ({ player, showToast }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log();
     if (`${Number(value)}` !== "NaN") {
       dispatch({ type: "ADD_SCORE", payload: Number(value) });
       updatePlayers(Number(value));
@@ -80,7 +79,7 @@ const Player = ({ player, showToast }) => {
 
   const resetHandler = () => {
     dispatch({ type: "RESET" });
-    updatePlayers(0);
+    updatePlayers(0, "reset");
     dispatch({ type: "CHANGE_VALUE", payload: "" });
   };
 
