@@ -57,7 +57,7 @@ const ScoreTable = ({ players, setPlayers, setOpen }) => {
   return (
     <TableContainer component={Paper}>
       <Toaster
-        position="bottom-center"
+        position="top-center"
         reverseOrder={false}
         toastOptions={{
           style: toastStyle,

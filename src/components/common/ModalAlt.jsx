@@ -50,7 +50,7 @@ const ModalAlt = ({ open, setOpen, players, setPlayers }) => {
   return (
     <>
       <Toaster
-        position="bottom-center"
+        position="top-center"
         reverseOrder={false}
         toastOptions={{
           style: toastStyle
